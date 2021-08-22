@@ -1,6 +1,6 @@
 import { CurrencyRupeeIcon, GlobeAltIcon } from "@heroicons/react/solid";
 
-const Footer = () => {
+function Footer() {
   return (
     <footer className='bg-gray-200 py-10'>
       <div className='max-w-7xl mx-auto px-16 grid md:grid-cols-4 text-sm divide-y md:divide-opacity-0 divide-gray-400 '>
@@ -94,6 +94,6 @@ const Footer = () => {
       </div>
     </footer>
   );
-};
+}
 
 export default Footer;

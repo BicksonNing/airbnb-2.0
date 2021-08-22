@@ -3,6 +3,7 @@ import {
   GlobeAltIcon,
   SearchIcon,
   MenuIcon,
+  UsersIcon,
   UserCircleIcon,
 } from "@heroicons/react/solid";
 import { useState } from "react";
@@ -10,13 +11,16 @@ import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRange, DateRangePicker } from "react-date-range";
 import { useMediaQuery } from "@react-hook/media-query";
+import { useRouter } from "next/dist/client/router";
 
-function Header() {
+function Header({ placeholder }) {
   const [searchInput, setSearchInput] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [noOfGuests, setNoOfGuests] = useState(1);
 
   const isSmallScreen = useMediaQuery("(max-width: 38rem)");
+  const router = useRouter();
 
   const selectionRange = {
     startDate: startDate,
@@ -29,10 +33,29 @@ function Header() {
     setEndDate(ranges.selection.endDate);
   };
 
+  const resetInput = () => {
+    setSearchInput("");
+  };
+
+  const search = () => {
+    router.push({
+      pathname: "/search",
+      query: {
+        location: searchInput,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        noOfGuests,
+      },
+    });
+  };
+
   return (
     <header className='sticky top-0 z-50 grid md:grid-cols-3 bg-white md:shadow-md px-5 py-4 md:px-10'>
       {/* left */}
-      <div className='hidden relative md:flex items-center h-10 cursor-pointer my-auto'>
+      <div
+        className='hidden relative md:flex items-center h-10 cursor-pointer my-auto'
+        onClick={() => router.push("/")}
+      >
         <Image
           src='https://links.papareact.com/qd3'
           layout='fill'
@@ -46,7 +69,7 @@ function Header() {
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           type='text'
-          placeholder='Start your Search'
+          placeholder={placeholder || "Start your Search"}
           className='flex-grow outline-none bg-transparent px-3 text-sm text-gray-600 placeholder-gray-400 cursor-pointer'
         />
         <SearchIcon className='flex-none h-8 bg-red-400 text-white rounded-full p-2 cursor-pointer hover:bg-red-500' />
@@ -82,6 +105,28 @@ function Header() {
                 onChange={handleSelect}
               />
             )}
+          </div>
+
+          <div className='flex items-center border-b mb-4'>
+            <h2 className='text-lg md:text-2xl flex-grow font-semibold'>
+              Number of Guests
+            </h2>
+            <UsersIcon className='h-5' />
+            <input
+              value={noOfGuests}
+              onChange={(e) => setNoOfGuests(e.target.value)}
+              min={1}
+              className='w-12 pl-2 text-lg outline-none text-red-400'
+              type='number'
+            />
+          </div>
+          <div className='flex'>
+            <button className='flex-grow text-gray-500' onClick={resetInput}>
+              Cancel
+            </button>
+            <button className='flex-grow text-red-400' onClick={search}>
+              Search
+            </button>
           </div>
         </div>
       )}
