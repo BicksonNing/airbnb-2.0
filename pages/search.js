@@ -3,6 +3,7 @@ import { useRouter } from "next/dist/client/router";
 import Footer from "../components/footer/Footer";
 import Header from "../components/header/Header";
 import InfoCard from "../components/search/InfoCard";
+import Map from "../components/search/Map";
 
 function Search({ searchResults }) {
   const router = useRouter();
@@ -63,6 +64,9 @@ function Search({ searchResults }) {
               )
             )}
           </div>
+        </section>
+        <section className='hidden lg:inline-flex lg:min-w-[600px]'>
+          <Map searchResults={searchResults} />
         </section>
       </main>
       <Footer />
